@@ -10,6 +10,10 @@ HOME="$(dirname "$(readlink -f $0)")"
 git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
 ./.local/share/junest/bin/junest setup -i junest-x86_64.tar.gz
 
+# BYPASS SIGNATURE CHECK LEVEL
+sed -i 's/#SigLevel/SigLevel/g' ./.junest/etc/pacman.conf
+sed -i 's/Required DatabaseOptional/Never/g' ./.junest/etc/pacman.conf
+
 # INSTALL YAY
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns yay
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -S --needed git base-devel
@@ -18,14 +22,14 @@ cd yay
 echo yes | $HOME/.local/share/junest/bin/junest -- makepkg -si
 cd ..
 
-# BYPASS SIGNATURE CHECK LEVEL
-#sed -i 's/#SigLevel/SigLevel/g' ./.junest/etc/pacman.conf
-#sed -i 's/Required DatabaseOptional/Never/g' ./.junest/etc/pacman.conf
-
 # UPDATE ARCH LINUX IN JUNEST
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns base-devel
 ./.local/share/junest/bin/junest -- sudo pacman -Syy
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Syu
 echo yes | ./.local/share/junest/bin/junest -- sudo pacman -Scc
+
+# RESTORE SIGNATURE CHECK LEVEL
+sed -i 's/SigLevel/#SigLevel/g' ./.junest/etc/pacman.conf
+sed -i 's/Never/Required DatabaseOptional/g' ./.junest/etc/pacman.conf
 
 echo 'SUCCESS!\n'
