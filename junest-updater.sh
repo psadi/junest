@@ -14,8 +14,9 @@ git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns yay
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -S --needed git base-devel
 ./.local/share/junest/bin/junest -- git clone https://aur.archlinux.org/yay.git
-./.local/share/junest/bin/junest -- cd yay
-./.local/share/junest/bin/junest -- makepkg -si
+cd yay
+echo yes | $HOME/.local/share/junest/bin/junest -- makepkg -si
+cd ..
 
 # BYPASS SIGNATURE CHECK LEVEL
 #sed -i 's/#SigLevel/SigLevel/g' ./.junest/etc/pacman.conf
