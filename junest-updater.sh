@@ -23,7 +23,7 @@ echo yes | $HOME/.local/share/junest/bin/junest -- makepkg -si
 cd ..
 
 # UPDATE ARCH LINUX IN JUNEST
-./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns base-devel
+./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns base-devel go
 ./.local/share/junest/bin/junest -- sudo pacman -Syy
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Syu
 echo yes | ./.local/share/junest/bin/junest -- sudo pacman -Scc
