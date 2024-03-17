@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # DOWNLOAD THE ARCHIVE
-wget https://github.com/ivan-hc/junest/releases/download/continuous/junest-x86_64.tar.gz
+wget https://github.com/ivan-hc/junest/releases/download/20240108/junest-x86_64.tar.gz
 
 # SET APPDIR AS A TEMPORARY $HOME DIRECTORY, THIS WILL DO ALL WORK INTO THE APPDIR
-HOME="$(dirname "$(readlink -f $0)")" 
+HOME="$(dirname "$(readlink -f $0)")"
 
 # DOWNLOAD AND INSTALL JUNEST (DON'T TOUCH THIS)
 git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
@@ -25,11 +25,8 @@ git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
 cd yay
 echo yes | $HOME/.local/share/junest/bin/junest -- makepkg -si
 cd ..
-
-if ! test -f ./.junest/usr/bin/yay; then
-	rsync -av ./yay/pkg/yay/usr/* ./.junest/usr/
-	rsync -av ./yay/pkg/yay-debug/usr/* ./.junest/usr/
-fi
+yayver=$(cat ./yay/PKGBUILD | grep "pkgver=" | head -1 | cut -c 8-)
+./.local/share/junest/bin/junest -- sudo pacman --noconfirm -U ./yay/yay-"$yayver"*.zst ./yay/yay-debug-"$yayver"*.zst
 
 # DEBLOAT
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns base-devel go
