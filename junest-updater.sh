@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # DOWNLOAD THE ARCHIVE
-wget https://github.com/ivan-hc/junest/releases/download/continuous/junest-x86_64.tar.gz
+wget $(curl -Ls https://api.github.com/repos/ivan-hc/junest/releases/latest | sed 's/[()",{} ]/\n/g' | grep -oi "https.*tar.gz$" | head -1)
 
 # SET APPDIR AS A TEMPORARY $HOME DIRECTORY, THIS WILL DO ALL WORK INTO THE APPDIR
 HOME="$(dirname "$(readlink -f $0)")"
