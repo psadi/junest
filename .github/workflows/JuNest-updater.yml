@@ -18,7 +18,8 @@ jobs:
       if: always()
       run: |
         sudo apt update
-        wget https://raw.githubusercontent.com/ivan-hc/junest/master/junest-updater.sh
+        wget https://github.com/ivan-hc/junest/releases/download/20240630/junest-x86_64.tar.gz
+        #wget https://raw.githubusercontent.com/ivan-hc/junest/master/junest-updater.sh
         chmod a+x ./junest-updater.sh
         ./junest-updater.sh
         if ! test -f ./.junest/usr/bin/yay; then exit; fi
