@@ -16,7 +16,7 @@ git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
 
 # UPDATE ARCH LINUX IN JUNEST
 ./.local/share/junest/bin/junest -- sudo pacman -Syy
-./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Syu
+#./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Syu
 
 # INSTALL YAY
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns yay
