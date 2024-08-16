@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
 # DOWNLOAD THE ARCHIVE
-wget $(curl -Ls https://api.github.com/repos/ivan-hc/junest/releases/latest | sed 's/[()",{} ]/\n/g' | grep -oi "https.*tar.gz$" | head -1)
+if ! test -f ./junest-x86_64.tar.gz; then
+	wget $(curl -Ls https://api.github.com/repos/ivan-hc/junest/releases/latest | sed 's/[()",{} ]/\n/g' | grep -oi "https.*tar.gz$" | head -1)
+fi
 
 # SET APPDIR AS A TEMPORARY $HOME DIRECTORY, THIS WILL DO ALL WORK INTO THE APPDIR
 HOME="$(dirname "$(readlink -f $0)")"
 
 # DOWNLOAD AND INSTALL JUNEST (DON'T TOUCH THIS)
-git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
-./.local/share/junest/bin/junest setup -i junest-x86_64.tar.gz
+if ! test -d ./.local/share/junest; then
+	git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
+	./.local/share/junest/bin/junest setup -i junest-x86_64.tar.gz
+fi
 
 # BYPASS SIGNATURE CHECK LEVEL
 #sed -i 's/#SigLevel/SigLevel/g' ./.junest/etc/pacman.conf
@@ -16,7 +20,7 @@ git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
 
 # UPDATE ARCH LINUX IN JUNEST
 ./.local/share/junest/bin/junest -- sudo pacman -Syy
-#./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Syu
+./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Syu
 
 # INSTALL YAY
 ./.local/share/junest/bin/junest -- sudo pacman --noconfirm -Rcns yay
