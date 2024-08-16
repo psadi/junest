@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 # DOWNLOAD THE ARCHIVE
-wget $(curl -Ls https://api.github.com/repos/ivan-hc/junest/releases/latest | sed 's/[()",{} ]/\n/g' | grep -oi "https.*tar.gz$" | head -1)
+#wget $(curl -Ls https://api.github.com/repos/ivan-hc/junest/releases/latest | sed 's/[()",{} ]/\n/g' | grep -oi "https.*tar.gz$" | head -1)
 
 # SET APPDIR AS A TEMPORARY $HOME DIRECTORY, THIS WILL DO ALL WORK INTO THE APPDIR
 HOME="$(dirname "$(readlink -f $0)")"
 
 # DOWNLOAD AND INSTALL JUNEST (DON'T TOUCH THIS)
 git clone https://github.com/fsquillace/junest.git ~/.local/share/junest
-./.local/share/junest/bin/junest setup -i junest-x86_64.tar.gz
+./.local/share/junest/bin/junest setup #-i junest-x86_64.tar.gz
 
 # BYPASS SIGNATURE CHECK LEVEL
 #sed -i 's/#SigLevel/SigLevel/g' ./.junest/etc/pacman.conf
