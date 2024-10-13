@@ -65,6 +65,9 @@ function build_image_env(){
     # https://app.travis-ci.com/github/fsquillace/junest/builds/268216346
     [[ -e "${maindir}"/root/etc/pacman.conf ]] || sudo curl "https://gitlab.archlinux.org/archlinux/packaging/packages/pacman/-/raw/main/pacman.conf" -o "${maindir}/root/etc/pacman.conf"
 
+    # Pacman/pacstrap bug: https://gitlab.archlinux.org/archlinux/packaging/packages/arch-install-scripts/-/issues/3
+    sudo sed -i '/^DownloadUser = alpm$/d' "${maindir}"/root/etc/pacman.conf
+
     sudo tee -a "${maindir}"/root/etc/pacman.conf <<EOT
 
 [junest]
@@ -73,7 +76,7 @@ Server = https://raw.githubusercontent.com/fsquillace/junest-repo/master/any
 EOT
     info "pacman.conf being used:"
     cat "${maindir}"/root/etc/pacman.conf
-    sudo pacman --noconfirm --config "${maindir}"/root/etc/pacman.conf --root "${maindir}"/root -Sy sudo-fake groot-git proot-static qemu-user-static-bin-alt yay
+    sudo pacman --noconfirm --config "${maindir}"/root/etc/pacman.conf --root "${maindir}"/root -Sy sudo-fake groot-git proot-static qemu-user-static-bin-alt yay-git
 
     echo "Generating the metadata info"
     sudo install -d -m 755 "${maindir}/root/etc/${CMD}"
@@ -84,13 +87,13 @@ EOT
     info "Generating the locales..."
     # sed command is required for locale-gen but it is required by fakeroot
     # and cannot be removed
-    # localedef (called by locale-gen) requires gzip
+    # localedef (called by locale-gen) requires gzip but it is supposed to be
+    # already installed as systemd already depends on it
     sudo pacman --noconfirm --root "${maindir}"/root -S sed gzip
     sudo ln -sf /usr/share/zoneinfo/posix/UTC "${maindir}"/root/etc/localtime
     sudo bash -c "echo 'en_US.UTF-8 UTF-8' >> ${maindir}/root/etc/locale.gen"
     sudo "${maindir}"/root/bin/groot "${maindir}"/root locale-gen
     sudo bash -c "echo LANG=\"en_US.UTF-8\" >> ${maindir}/root/etc/locale.conf"
-    sudo pacman --noconfirm --root "${maindir}"/root -Rsn gzip
 
     info "Setting up the pacman keyring (this might take a while!)..."
     if [[ $(uname -m) == *"arm"* ]]
