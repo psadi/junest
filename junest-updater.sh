@@ -19,12 +19,12 @@ fi
 #sed -i 's/Required DatabaseOptional/Never/g' ./.junest/etc/pacman.conf
 
 # Manually download and extract "bubblewrap", "fakeroot" and "sqlite"
-mkdir -p important
-wget -q https://archlinux.org/packages/extra/x86_64/bubblewrap/download/ --trust-server-names
-wget -q https://archlinux.org/packages/core/x86_64/fakeroot/download/ --trust-server-names
-wget -q https://archlinux.org/packages/core/x86_64/sqlite/download/ --trust-server-names
-for t in ./*tar.zst; do tar xf "$t" -C important/; done
-rsync -a ./important/usr/* ./.junest/usr/
+#mkdir -p important
+#wget -q https://archlinux.org/packages/extra/x86_64/bubblewrap/download/ --trust-server-names
+#wget -q https://archlinux.org/packages/core/x86_64/fakeroot/download/ --trust-server-names
+#wget -q https://archlinux.org/packages/core/x86_64/sqlite/download/ --trust-server-names
+#for t in ./*tar.zst; do tar xf "$t" -C important/; done
+#rsync -a ./important/usr/* ./.junest/usr/
 
 # UPDATE ARCH LINUX IN JUNEST
 ./.local/share/junest/bin/junest -- sudo pacman -Syy
