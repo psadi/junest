@@ -27,11 +27,11 @@ jobs:
         mv *tar.gz dist/
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4.4.0
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: junest-x86_64.tar.gz
         path: 'dist'
-        
+
   release:
       needs: [build]
       permissions: write-all
@@ -53,3 +53,21 @@ jobs:
               junest-x86_64.tar.gz
             repo_token: ${{ secrets.GITHUB_TOKEN }}
 
+        #Snapshot Release
+        - name: Get Date
+          run: |
+            SNAPSHOT_TAG="$(date '+%Y%m%d')"
+            echo SNAPSHOT_TAG="${SNAPSHOT_TAG}" >> "${GITHUB_ENV}"
+          continue-on-error: false
+        - name: Snapshot Releaser
+          uses: softprops/action-gh-release@v2
+          with:
+            name: "${{ env.SNAPSHOT_TAG}}"
+            tag_name: "${{ env.SNAPSHOT_TAG}}"
+            prerelease: false
+            draft: false
+            generate_release_notes: false
+            make_latest: false
+            files: |
+              junest-x86_64.tar.gz
+          continue-on-error: false
